@@ -1,6 +1,5 @@
 package com.spring_app.Entidad;
 
-
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,13 +19,13 @@ public class Producto {
     private Double precio;
     private int stock;
 
-
     @ManyToOne
-    @JoinColumn(name = "codigo_proveedor")
+    @JoinColumn(name = "id_proveedor")
     private Proveedor proveedor;
 
+    @ManyToMany(mappedBy = "productos")
+    private List<Cliente> clientes;
 
-
+    @OneToMany(mappedBy = "producto")
+    private List<Factura> facturas;
 }
-
-

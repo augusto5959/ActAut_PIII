@@ -1,6 +1,5 @@
 package com.spring_app.Entidad;
 
-
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,13 +14,16 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private  String nombre;
-    private  String apellido;
-    private  String direccion;
+    private String nombre;
+    private String apellido;
+    private String direccion;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaNacimiento;
 
+    // Relaciones (opcionales, dependiendo de tu lógica de negocio)
+    @OneToMany(mappedBy = "cliente")
+    private List<Factura> facturas;
 
     @ManyToMany
     @JoinTable(
@@ -30,9 +32,4 @@ public class Cliente {
             inverseJoinColumns = @JoinColumn(name = "id_producto")
     )
     private List<Producto> productos;
-
-
-
-    @ManyToMany(mappedBy = "productos")
-    private List<Cliente> clientes;
 }

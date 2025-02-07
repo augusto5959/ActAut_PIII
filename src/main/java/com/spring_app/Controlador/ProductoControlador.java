@@ -26,20 +26,26 @@ public class ProductoControlador {
     @Autowired
     ProductoServicio productoServicio;
 
+    // Ruta raíz para cargar el index.html
+    @GetMapping("/")
+    public String mostrarIndex() {
+        return "pages/index"; // Devuelve la vista index.html
+    }
+
     //LEER
     @GetMapping("/productos")
     public String mostrarProductos(@RequestParam(name = "buscarProducto", required = false, defaultValue = "") String buscarProducto, Model model){
         List<Producto> productos = productoServicio.buscarProductoNombre(buscarProducto);
         model.addAttribute("buscarProducto", buscarProducto);
         model.addAttribute("productos", productos);
-        return "/Producto/listaProductos";
+        return "pages/Producto/listaProductos";
     }
 
     //CREAR
     @GetMapping("/formulario")
     public String formularioProducto(Model model){
         model.addAttribute("producto", new Producto());
-        return "/Producto/formulario";
+        return "pages/Producto/formulario";
     }
 
     @PostMapping("/guardar")
@@ -53,7 +59,7 @@ public class ProductoControlador {
     public String editarProducto(@PathVariable Long id, Model model){
         Optional<Producto> producto = productoServicio.buscarProducto(id);
         model.addAttribute("producto", producto);
-        return "/Producto/formulario";
+        return "pages/Producto/formulario";
     }
 
     //ELIMINAR
@@ -64,7 +70,7 @@ public class ProductoControlador {
     }
 
     @GetMapping("/productos/pdf")
-    public ResponseEntity<byte[]>  descargaPdf() throws Exception{
+    public ResponseEntity<byte[]> descargaPdf() throws Exception{
         String rutaPdf = productoServicio.generarPdf();
         File pdfFile = new File(rutaPdf);
         if (!pdfFile.exists()){
@@ -76,5 +82,4 @@ public class ProductoControlador {
         headers.setContentDispositionFormData("attachment","productos.pdf");
         return new ResponseEntity<>(contenido, headers, HttpStatus.OK);
     }
-
 }
